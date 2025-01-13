@@ -10,7 +10,9 @@
     "author": "Hyperledger",
     "license": "Apache-2.0",
     "dependencies": {
+        "express": "^4.21.2",
         "fabric-ca-client": "^2.2.4",
-        "fabric-network": "^2.2.4"
+        "fabric-network": "^2.2.4",
+        "random-hash": "^4.0.1"
     }
 }
