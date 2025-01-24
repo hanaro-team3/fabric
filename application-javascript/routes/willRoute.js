@@ -6,6 +6,37 @@ const RandomHash = require('random-hash');
 
 const router = express.Router();
 
+function formatInheritance(inheritances) {
+    return inheritances.map(inheritance => ({
+        type: inheritance.type,
+        subType: inheritance.subType,
+        financialInstitution: inheritance.financialInstitution || '',
+        asset: inheritance.asset,
+        amount: inheritance.amount || '',
+        ancestors: inheritance.ancestors.map(ancestor => ({
+            name: ancestor.name,
+            relation: ancestor.relation,
+            ratio: ancestor.ratio,
+        })),
+    }));
+}
+
+function formatExecutor(executors) {
+    return executors.map(executor => ({
+        name: executor.name,
+        relation: executor.relation,
+        priority: executor.priority,
+    }));
+}
+
+function formatFinalMessages(finalMessages) {
+    return finalMessages.map(finalMessage => ({
+        name: finalMessage.name,
+        relation: finalMessage.relation,
+        message: finalMessage.message,
+    }));
+}
+
 router.get('/', async (req, res) => {
     try {
         const contract = getContract();
@@ -30,16 +61,22 @@ router.get('/:willId', async (req, res) => {
 router.post('/', async (req, res) => {
     try {
         const willId = RandomHash.generateHash();
-        const { inheritances, executors, wills, shareAt } = req.body;
+        const { inheritances, executors, finalMessages, shareAt } = req.body;
         const contract = getContract();
+
+        const formattedInheritances = formatInheritance(inheritances);
+        const formattedExecutors = formatExecutor(executors);
+        const formattedFinalMessages = formatFinalMessages(finalMessages);
+
         const result = await contract.submitTransaction(
             'CreateWill',
             willId,
-            JSON.stringify(inheritances),
-            JSON.stringify(executors),
-            JSON.stringify(wills),
+            JSON.stringify(formattedInheritances),
+            JSON.stringify(formattedExecutors),
+            JSON.stringify(formattedFinalMessages),
             shareAt
         );
+
         if (`${result}` === '') {
             res.status(200).json({ result: { willId } });
         } else {

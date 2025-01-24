@@ -12,27 +12,38 @@ type WillTransferContract struct {
 }
 
 type Will struct {
-	WillID       string         `json:"willId"`
-	Inheritances []Inheritance  `json:"inheritances"`
-	Executors    []Executor     `json:"executors"`
-	Wills        []WillContent  `json:"wills"`
-	ShareAt      int            `json:"shareAt"`
+	WillID        string          `json:"willId"`
+	Inheritances  []Inheritance   `json:"inheritances"`
+	Executors     []Executor      `json:"executors"`
+	FinalMessages []FinalMessage  `json:"finalMessages"`
+	ShareAt       int             `json:"shareAt"`
 }
 
 type Inheritance struct {
+	Type                string      `json:"type"`
+	SubType             string      `json:"subType"`
+	FinancialInstitution string     `json:"financialInstitution"`
+	Asset               string      `json:"asset"`
+	Amount              string      `json:"amount"`
+	Ancestors           []Ancestor  `json:"ancestors"`
+}
+
+type Ancestor struct {
 	Name     string `json:"name"`
 	Relation string `json:"relation"`
-	Asset    string `json:"asset"`
+	Ratio    int    `json:"ratio"`
 }
 
 type Executor struct {
 	Name     string `json:"name"`
 	Relation string `json:"relation"`
+	Priority int    `json:"priority"`
 }
 
-type WillContent struct {
+type FinalMessage struct {
+	Name     string `json:"name"`
 	Relation string `json:"relation"`
-	Content  string `json:"content"`
+	Message  string `json:"message"`
 }
 
 func (c *WillTransferContract) InitLedger(ctx contractapi.TransactionContextInterface) error {
@@ -40,30 +51,25 @@ func (c *WillTransferContract) InitLedger(ctx contractapi.TransactionContextInte
 		{
 			WillID: "will1",
 			Inheritances: []Inheritance{
-				{Name: "Sohee", Relation: "Daughter", Asset: "Building"},
-				{Name: "Bob", Relation: "Son", Asset: "Apartment"},
+				{
+					Type:                "Real Estate",
+					SubType:             "Apartment",
+					FinancialInstitution: "",
+					Asset:               "Building",
+					Amount:              "",
+					Ancestors: []Ancestor{
+						{Name: "Sohee", Relation: "Daughter", Ratio: 50},
+						{Name: "Bob", Relation: "Son", Ratio: 50},
+					},
+				},
 			},
 			Executors: []Executor{
-				{Name: "Charlie", Relation: "Executor1"},
+				{Name: "Charlie", Relation: "Executor1", Priority: 1},
 			},
-			Wills: []WillContent{
-				{Relation: "Daughter", Content: "This is the first will."},
+			FinalMessages: []FinalMessage{
+				{Name: "Sohee", Relation: "Daughter", Message: "Take care of your brother."},
 			},
-			ShareAt: 2025,
-		},
-		{
-			WillID: "will2",
-			Inheritances: []Inheritance{
-				{Name: "David", Relation: "Son", Asset: "Million dollars"},
-				{Name: "Eve", Relation: "Son", Asset: "Billion dollars"},
-			},
-			Executors: []Executor{
-				{Name: "Frank", Relation: "Executor2"},
-			},
-			Wills: []WillContent{
-				{Relation: "Son", Content: "This is the second will."},
-			},
-			ShareAt: 2026,
+			ShareAt: 2,
 		},
 	}
 
@@ -80,7 +86,7 @@ func (c *WillTransferContract) InitLedger(ctx contractapi.TransactionContextInte
 	return nil
 }
 
-func (c *WillTransferContract) CreateWill(ctx contractapi.TransactionContextInterface, willID string, inheritances []Inheritance, executors []Executor, wills []WillContent, shareAt int) error {
+func (c *WillTransferContract) CreateWill(ctx contractapi.TransactionContextInterface, willID string, inheritances []Inheritance, executors []Executor, finalMessages []FinalMessage, shareAt int) error {
 	exists, err := c.WillExists(ctx, willID)
 	if err != nil {
 		return err
@@ -90,11 +96,11 @@ func (c *WillTransferContract) CreateWill(ctx contractapi.TransactionContextInte
 	}
 
 	will := Will{
-		WillID:       willID,
-		Inheritances: inheritances,
-		Executors:    executors,
-		Wills:        wills,
-		ShareAt:      shareAt,
+		WillID:        willID,
+		Inheritances:  inheritances,
+		Executors:     executors,
+		FinalMessages: finalMessages,
+		ShareAt:       shareAt,
 	}
 
 	willJSON, err := json.Marshal(will)
@@ -123,7 +129,7 @@ func (c *WillTransferContract) ReadWill(ctx contractapi.TransactionContextInterf
 	return &will, nil
 }
 
-func (c *WillTransferContract) UpdateWill(ctx contractapi.TransactionContextInterface, willID string, inheritances []Inheritance, executors []Executor, wills []WillContent, shareAt int) error {
+func (c *WillTransferContract) UpdateWill(ctx contractapi.TransactionContextInterface, willID string, inheritances []Inheritance, executors []Executor, finalMessages []FinalMessage, shareAt int) error {
 	exists, err := c.WillExists(ctx, willID)
 	if err != nil {
 		return err
@@ -133,11 +139,11 @@ func (c *WillTransferContract) UpdateWill(ctx contractapi.TransactionContextInte
 	}
 
 	will := Will{
-		WillID:       willID,
-		Inheritances: inheritances,
-		Executors:    executors,
-		Wills:        wills,
-		ShareAt:      shareAt,
+		WillID:        willID,
+		Inheritances:  inheritances,
+		Executors:     executors,
+		FinalMessages: finalMessages,
+		ShareAt:       shareAt,
 	}
 
 	willJSON, err := json.Marshal(will)
@@ -193,3 +199,4 @@ func (c *WillTransferContract) GetAllWills(ctx contractapi.TransactionContextInt
 
 	return wills, nil
 }
+
