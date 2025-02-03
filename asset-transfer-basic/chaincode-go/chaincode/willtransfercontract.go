@@ -32,6 +32,7 @@ type Ancestor struct {
 	Name     string `json:"name"`
 	Relation string `json:"relation"`
 	Ratio    int    `json:"ratio"`
+	PhoneNumber string `json:"phoneNumber"`
 }
 
 type Executor struct {
@@ -58,8 +59,18 @@ func (c *WillTransferContract) InitLedger(ctx contractapi.TransactionContextInte
 					Asset:               "Building",
 					Amount:              "",
 					Ancestors: []Ancestor{
-						{Name: "Sohee", Relation: "Daughter", Ratio: 50},
-						{Name: "Bob", Relation: "Son", Ratio: 50},
+						{
+							Name:		"Sohee",
+							Relation:	"Daughter",
+							Ratio:		50,
+							PhoneNumber:	"010-1234-5678",
+						},
+						{
+							Name:		"Sujin",
+							Relation:	"Son",
+							Ratio:		50,
+							PhoneNumber:	"010-8765-4321",
+						},
 					},
 				},
 			},

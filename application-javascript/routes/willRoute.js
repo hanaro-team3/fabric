@@ -6,24 +6,6 @@ const { getContract } = require('../config/fabric');
 const RandomHash = require('random-hash');
 
 const router = express.Router();
-const app = express();
-
-// CORS 설정
-app.use(
-	cors({
-		origin: "http://localhost:5173", // React 개발 서버의 도메인
-		methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-		allowedHeaders: ["Content-Type", "Authorization"], // 필요한 헤더 명시
-	})
-);
-
-// Preflight 요청 처리
-app.options("*", (req, res) => {
-	res.header("Access-Control-Allow-Origin", "http://localhost:5173");
-	res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-	res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-	res.sendStatus(200);
-});
 
 function formatInheritance(inheritances) {
     return inheritances.map(inheritance => ({
@@ -33,9 +15,10 @@ function formatInheritance(inheritances) {
         asset: inheritance.asset,
         amount: inheritance.amount || '',
         ancestors: inheritance.ancestors.map(ancestor => ({
-            name: ancestor.name,
-            relation: ancestor.relation,
-            ratio: ancestor.ratio,
+		name: ancestor.name,
+		relation: ancestor.relation,
+		ratio: ancestor.ratio,
+		phoneNumber: ancestor.phoneNumnber || ''
         })),
     }));
 }
