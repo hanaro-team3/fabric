@@ -14,9 +14,10 @@ function formatInheritance(inheritances) {
         asset: inheritance.asset,
         amount: inheritance.amount || '',
         ancestors: inheritance.ancestors.map(ancestor => ({
-            name: ancestor.name,
-            relation: ancestor.relation,
-            ratio: ancestor.ratio,
+		name: ancestor.name,
+		relation: ancestor.relation,
+		ratio: ancestor.ratio,
+		phoneNumber: ancestor.phoneNumber || ''
         })),
     }));
 }
