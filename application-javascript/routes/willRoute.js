@@ -17,7 +17,7 @@ function formatInheritance(inheritances) {
 		name: ancestor.name,
 		relation: ancestor.relation,
 		ratio: ancestor.ratio,
-		phoneNumber: ancestor.phoneNumnber || ''
+		phoneNumber: ancestor.phoneNumber || ''
         })),
     }));
 }
