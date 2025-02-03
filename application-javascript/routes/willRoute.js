@@ -1,6 +1,5 @@
 'use strict';
 
-const cors = require('cors');
 const express = require('express');
 const { getContract } = require('../config/fabric');
 const RandomHash = require('random-hash');
