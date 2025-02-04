@@ -7,31 +7,31 @@ const RandomHash = require('random-hash');
 const router = express.Router();
 
 function formatInheritance(inheritances) {
-    return inheritances.map(inheritance => ({
+    return inheritances.map((inheritance) => ({
         type: inheritance.type,
         subType: inheritance.subType,
         financialInstitution: inheritance.financialInstitution || '',
         asset: inheritance.asset,
         amount: inheritance.amount || '',
-        ancestors: inheritance.ancestors.map(ancestor => ({
-		name: ancestor.name,
-		relation: ancestor.relation,
-		ratio: ancestor.ratio,
-		phoneNumber: ancestor.phoneNumber || ''
+        ancestors: inheritance.ancestors.map((ancestor) => ({
+            name: ancestor.name,
+            relation: ancestor.relation,
+            ratio: ancestor.ratio,
         })),
     }));
 }
 
 function formatExecutor(executors) {
-    return executors.map(executor => ({
+    return executors.map((executor) => ({
         name: executor.name,
         relation: executor.relation,
         priority: executor.priority,
+        phoneNumber: executor.phoneNumber,
     }));
 }
 
 function formatFinalMessages(finalMessages) {
-    return finalMessages.map(finalMessage => ({
+    return finalMessages.map((finalMessage) => ({
         name: finalMessage.name,
         relation: finalMessage.relation,
         message: finalMessage.message,

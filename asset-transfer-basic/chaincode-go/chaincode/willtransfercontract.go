@@ -32,13 +32,13 @@ type Ancestor struct {
 	Name     string `json:"name"`
 	Relation string `json:"relation"`
 	Ratio    int    `json:"ratio"`
-	PhoneNumber string `json:"phoneNumber"`
 }
 
 type Executor struct {
-	Name     string `json:"name"`
-	Relation string `json:"relation"`
-	Priority int    `json:"priority"`
+	Name        string `json:"name"`
+	Relation    string `json:"relation"`
+	Priority    int    `json:"priority"`
+	PhoneNumber string `json:"phoneNumber"`
 }
 
 type FinalMessage struct {
@@ -63,19 +63,17 @@ func (c *WillTransferContract) InitLedger(ctx contractapi.TransactionContextInte
 							Name:		"Sohee",
 							Relation:	"Daughter",
 							Ratio:		50,
-							PhoneNumber:	"010-1234-5678",
 						},
 						{
 							Name:		"Sujin",
 							Relation:	"Son",
 							Ratio:		50,
-							PhoneNumber:	"010-8765-4321",
 						},
 					},
 				},
 			},
 			Executors: []Executor{
-				{Name: "Charlie", Relation: "Executor1", Priority: 1},
+				{Name: "Charlie", Relation: "Executor1", Priority: 1, PhoneNumber: "010-1234-5678"},
 			},
 			FinalMessages: []FinalMessage{
 				{Name: "Sohee", Relation: "Daughter", Message: "Take care of your brother."},
